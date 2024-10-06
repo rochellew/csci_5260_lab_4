@@ -125,11 +125,8 @@ def score_position(board, piece):
 def is_terminal_node(board):
 	return winning_move(board, PLAYER_PIECE) or winning_move(board, AI_PIECE) or len(get_valid_locations(board)) == 0
 
-def alpha_beta_prune(alpha, beta):
-	# TODO: code the alpha beta pruning code 
-	# APPARENTLY this can be done in 6 lines of code
-	pass
-
+# The maximizing player (AI) wants to offer more than -infinity 
+# The minimizing player (USER) wants to offer less than +infinity
 def minimax(alpha, beta, board, depth, maximizingPlayer):
 	valid_locations = get_valid_locations(board)
 	is_terminal = is_terminal_node(board)
@@ -150,11 +147,23 @@ def minimax(alpha, beta, board, depth, maximizingPlayer):
 			row = get_next_open_row(board, col)
 			b_copy = board.copy()
 			drop_piece(b_copy, row, col, AI_PIECE)
-			new_score = minimax(b_copy, depth-1, False)[1]
+			new_score = minimax(alpha, beta, b_copy, depth-1, False)[1]
 			if new_score > value:
 				value = new_score
 				column = col
-		print("MAX:",column, value)
+			# recurseively update alpha to the maximizing value 
+			# the first iteration is anything > negative infinity
+			alpha = max(alpha, value) 
+
+			print(f"Maximizing Player - Column: {col}, Alpha: {alpha}, Beta: {beta}")
+
+			# maximization is better than or meets the minimization
+			if alpha >= beta:
+				# prune the branch from the game tree as further exploration is uneccessary
+				# recursion ends
+				print("Pruning branch (alpha >= beta)")
+				break
+		# print("MAX:",column, value)
 		return column, value
 
 	else: # Minimizing player
@@ -164,11 +173,19 @@ def minimax(alpha, beta, board, depth, maximizingPlayer):
 			row = get_next_open_row(board, col)
 			b_copy = board.copy()
 			drop_piece(b_copy, row, col, PLAYER_PIECE)
-			new_score = minimax(b_copy, depth-1, True)[1]
+			new_score = minimax(alpha, beta, b_copy, depth-1, True)[1]
 			if new_score < value:
 				value = new_score
 				column = col
-		print("MIN:",column, value)
+			# recurseively update alpha to the maximizing value 
+			# the first iteration is anything < positive infinity
+			beta = min(beta, value)
+			# minimization is better than or meets the maximization
+			if beta <= alpha:
+				# prune the branch from the game tree as further exploration is uneccessary
+				# recursion ends
+				break # cut the branch
+		# print("MIN:",column, value)
 		return column, value
 
 def get_valid_locations(board):
