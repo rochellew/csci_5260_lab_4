@@ -125,7 +125,12 @@ def score_position(board, piece):
 def is_terminal_node(board):
 	return winning_move(board, PLAYER_PIECE) or winning_move(board, AI_PIECE) or len(get_valid_locations(board)) == 0
 
-def minimax(board, depth, maximizingPlayer):
+def alpha_beta_prune(alpha, beta):
+	# TODO: code the alpha beta pruning code 
+	# APPARENTLY this can be done in 6 lines of code
+	pass
+
+def minimax(alpha, beta, board, depth, maximizingPlayer):
 	valid_locations = get_valid_locations(board)
 	is_terminal = is_terminal_node(board)
 	if depth == 0 or is_terminal:
@@ -269,7 +274,7 @@ while not game_over:
 
 		#col = random.randint(0, COLUMN_COUNT-1)
 		#col = pick_best_move(board, AI_PIECE)
-		col, minimax_score = minimax(board, 5, True)
+		col, minimax_score = minimax(-math.inf, math.inf, board, 5, True)
 
 		if is_valid_location(board, col):
 			#pygame.time.wait(500)
