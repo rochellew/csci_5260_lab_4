@@ -154,16 +154,12 @@ def minimax(alpha, beta, board, depth, maximizingPlayer):
 			# recurseively update alpha to the maximizing value 
 			# the first iteration is anything > negative infinity
 			alpha = max(alpha, value) 
-
-			print(f"Maximizing Player - Column: {col}, Alpha: {alpha}, Beta: {beta}")
-
 			# maximization is better than or meets the minimization
 			if alpha >= beta:
 				# prune the branch from the game tree as further exploration is uneccessary
 				# recursion ends
-				print("Pruning branch (alpha >= beta)")
 				break
-		# print("MAX:",column, value)
+		print("MAX:", column, value)
 		return column, value
 
 	else: # Minimizing player
@@ -177,14 +173,14 @@ def minimax(alpha, beta, board, depth, maximizingPlayer):
 			if new_score < value:
 				value = new_score
 				column = col
-			# recurseively update alpha to the maximizing value 
+			# recurseively update beta to the minimizing value 
 			# the first iteration is anything < positive infinity
 			beta = min(beta, value)
 			# minimization is better than or meets the maximization
 			if beta <= alpha:
 				# prune the branch from the game tree as further exploration is uneccessary
 				# recursion ends
-				break # cut the branch
+				break
 		# print("MIN:",column, value)
 		return column, value
 
